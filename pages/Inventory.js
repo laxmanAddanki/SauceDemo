@@ -33,14 +33,24 @@ class Inventory extends BasePage{
     }
 
     async addFirstProductToCart (){
-            const firstProduct =    this.products.first();
-            await firstProduct.getByRole('button', {name:/Add to cart/i}).click()
+            const firstProduct =  this.products.first();
+            await firstProduct.getByRole('button', {name:/add to cart/i}).click()
     }
 
     async removeProductFromCart(){
         await this.page.getByTestId("shopping-cart-link").click();
         const firstCartItem = this.page.locator('.cart_item').first();
-        await firstCartItem.getByRole('button', {name: /Remove/i}).click();
+        await firstCartItem.getByRole('button', {name: /remove/i}).click();
+    }
+
+    async getCartCount(){
+      const cartIcon = this.page.getByTestId("shopping-cart-badge");
+
+      if(await cartIcon.count() ==0 ){
+        return 0;
+      }
+      const productCount = cartIcon.textContent();
+      return Number(productCount);
     }
 }
 

@@ -1,16 +1,23 @@
-const {test, expect} = require("@playwright/test")
-const {landingPage} = require("../pages/Inventory")
-const users = require('../test-data/users.json')
-const {LoginPage} = require('../pages/LoginPage')
+    const {test, expect} = require("../fixtures/LoggedInFixture")
+    const users = require('../test-data/users.json')
 
-let inventoryPage;
-let lp; 
-test.describe.serial("serial tests", ()=>{
-    test.beforeEach("Login", async({page})=>{
-    inventoryPage = new landingPage(page);
-    lp = new LoginPage(page);
-    await inventoryPage.naviagte('https://www.saucedemo.com/');
-    await inventoryPage.lp.login(users.validUser.username, users.validUser.password);
-    await expect(page).toHaveURL(/inventory/i);
+    test.describe("Inventory Tests", () => {
+
+    test('Verify product count', async({loggedInPage:{inventoryPage}})=> {
+        const productNames = await inventoryPage.getProductNames();
+        expect(productNames.length).toBe(6);
     })
-});
+
+    test('Add products to cart', async({loggedInPage: {inventoryPage, page}})=>{
+        await inventoryPage.addFirstProductToCart();
+        await expect(page).toHaveURL('https://www.saucedemo.com/cart.html');
+        await expect(page.getByTestId('shopping-cart-badge')).toHaveText('1');  
+
+    })
+
+    test("Check number of products in cart", async({loggedInPage})=>{
+        await loggedInPage.inventoryPage.addFirstProductToCart();
+        const count = await loggedInPage.inventoryPage.getCartCount();
+        expect(count).toBe(1);  
+    })
+    });

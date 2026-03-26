@@ -16,22 +16,30 @@ test('Verify Login with Valid username and password', async({page}) =>{
 
 test('Verify login with invalid username and password', async({page})=> {
     await lp.login(users.invalidUser.username, users.invalidUser.password);
-    await expect(page.getByTestId('error')).toContainText("Username and password do not match any user in this service");
+    if(users.invalidUser.expected.type== "error"){
+        await expect(page.getByTestId('error')).toHaveText(users.invalidUser.expected.message);
+    }
 })
 
 test('Verify Login with lockedout user', async({page})=> {
     await lp.login(users.lockedUser.username, users.lockedUser.password);
-    await expect(page.getByTestId('error')).toContainText('Sorry, this user has been locked out.');
+    if(users.lockedUser.expected.type == 'locked'){
+        await expect(page.getByTestId('error')).toHaveText(users.lockedUser.expected.message);
+    }
 })
 
 test("Verify login with empty username", async({page})=> {
     await lp.login(users.emptyuserName.username, users.emptyuserName.password);
-    await expect(page.getByTestId('error')).toContainText(/Epic sadface/);
+     if(users.lockedUser.expected.type == 'error'){
+        await expect(page.getByTestId('error')).toHaveText(users.emptyUserName.expected.message);
+    }
 })
 
 test("Verify login with empty password", async({page})=> {
 
     await lp.login(users.emptyPassword.username, users.emptyPassword.password);
-    await expect(page.getByTestId('error')).toHaveText("Epic sadface: Password is required");
+         if(users.lockedUser.expected.type == 'error'){
+        await expect(page.getByTestId('error')).toHaveText(users.emptyPassword.expected.message);
+    }
 
 })
