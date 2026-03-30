@@ -4,7 +4,7 @@ const {Inventory} = require ("../pages/Inventory")
 const users = require('../test-data/users.json')
 
 exports.test = base.test.extend ({
-    loggedInPage : async({page}, use)=>{
+    inventoryPage : async({page}, use)=>{
 
         const loginPage = new LoginPage(page);
         const inventoryPage = new Inventory(page);
@@ -12,6 +12,7 @@ exports.test = base.test.extend ({
         await loginPage.navigate('https://www.saucedemo.com/');
         await loginPage.login(users.validUser.username, users.validUser.password);
 
-        await use({inventoryPage, page, loginPage});
+        await use(inventoryPage);
     }
 })
+    export {expect};

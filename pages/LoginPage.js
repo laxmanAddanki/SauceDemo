@@ -7,7 +7,6 @@ class LoginPage extends BasePage{
         this.userName = page.getByPlaceholder('Username');
         this.password = page.getByPlaceholder('Password');
         this.loginButton = page.getByRole('button', {name: /login/i});
-        this.errorMessage = page.get
     }
 
     async login(userName, password){

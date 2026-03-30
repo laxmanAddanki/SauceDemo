@@ -1,10 +1,12 @@
+import {expect } from '@playwright/test';
+
 const {BasePage} = require('./BasePage')
 
 class Inventory extends BasePage{
 
     constructor(page){
         super(page);
-        this.products = page.locator(".inventory_item");
+       this.products = page.locator(".inventory_item"); 
 
     }
     
@@ -42,16 +44,17 @@ class Inventory extends BasePage{
         const firstCartItem = this.page.locator('.cart_item').first();
         await firstCartItem.getByRole('button', {name: /remove/i}).click();
     }
+    async goToCart(){
+       const cartIcon =  this.page.locator('.shopping_cart_link');
+        await cartIcon.click();
+    }
 
     async getCartCount(){
-      const cartIcon = this.page.getByTestId("shopping-cart-badge");
-
-      if(await cartIcon.count() ==0 ){
-        return 0;
-      }
-      const productCount = cartIcon.textContent();
-      return Number(productCount);
+      const cartIcon = this.page.locator('.shopping_cart_link');
+      await expect(cartIcon).toHaveText(/^\d+$/); 
+      const productCount = await cartIcon.textContent();
+      return Number(productCount || 0);
     }
-}
+}       
 
 export{Inventory}
