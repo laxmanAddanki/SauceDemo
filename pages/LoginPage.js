@@ -14,8 +14,8 @@ class LoginPage extends BasePage{
         await this.userName.fill(userName);
         await this.password.click()
         await this.password.fill(password);
-        await this.loginButton.click();
+        await this.loginButton.click()
     }
 }
 
-export{LoginPage};
+module.exports= {LoginPage};

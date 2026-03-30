@@ -5,7 +5,7 @@
         }
 
         async navigate(url){
-            await this.page.goto(url, {waitUntil: 'networkidle'});
+            await this.page.goto(url, { waitUntil: 'load' });
         }
     }
-    export{BasePage};
+    module.exports= {BasePage};

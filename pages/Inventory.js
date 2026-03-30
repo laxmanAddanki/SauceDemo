@@ -11,7 +11,7 @@ class Inventory extends BasePage{
     }
     
     async getProductNames(){
-        const productCount= await this.products.count();
+        const productCount = await this.products.count();
         let names=[];
         for (let i=0; i<productCount; i++){
             const product = this.products.nth(i)
@@ -34,18 +34,8 @@ class Inventory extends BasePage{
         
     }
 
-    async addFirstProductToCart (){
-            const firstProduct =  this.products.first();
-            await firstProduct.getByRole('button', {name:/add to cart/i}).click()
-    }
-
-    async addSecondProductToCart(){
-        const secondProduct = this.products.nth(1);
-        await secondProduct.getByRole('button', {name:/add to cart/i}).click()    
-    }
-
     async addProductsByIndex (index){
-        const currentProduct = this.products.n(index);
+        const currentProduct = this.products.nth(index);
         await currentProduct.getByRole('button', {name: /add to cart/i}).click();
     }
 
@@ -64,6 +54,22 @@ class Inventory extends BasePage{
       const productCount = await cartIcon.textContent();
       return Number(productCount || 0);
     }
+
+    async sortBy(option){
+        const sortByOption = this.page.locator(".product_sort_container");
+        await sortByOption.selectOption(option);
+    }
+
+    async getProductPrices(){
+        const productPrice = await this.products.count();
+        let productPrices =[];
+        for (let i=0; i<productPrice; i++){
+            const currentProduct = this.products.nth(i);
+            const productPrice = await currentProduct.locator('.inventory_item_price').textContent() || "";
+            productPrices.push(productPrice);
+        }
+        return productPrices;
+    }
 }       
 
-export{Inventory}
+module.exports= {Inventory}

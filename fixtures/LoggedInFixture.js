@@ -8,11 +8,13 @@ exports.test = base.test.extend ({
 
         const loginPage = new LoginPage(page);
         const inventoryPage = new Inventory(page);
-
+        console.log("navigating to url....")
         await loginPage.navigate('https://www.saucedemo.com/');
+        console.log("Entering Credentials")
         await loginPage.login(users.validUser.username, users.validUser.password);
-
+        console.log("before usage")
         await use(inventoryPage);
+        console.log("after login")
     }
 })
     exports.expect = expect;
