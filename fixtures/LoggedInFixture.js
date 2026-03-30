@@ -1,4 +1,4 @@
-const base = require ("@playwright/test")
+const { test: base, expect } = require('@playwright/test');
 const {LoginPage} = require("../pages/LoginPage")
 const {Inventory} = require ("../pages/Inventory")
 const users = require('../test-data/users.json')
@@ -15,4 +15,4 @@ exports.test = base.test.extend ({
         await use(inventoryPage);
     }
 })
-    export {expect};
+    exports.expect = expect;

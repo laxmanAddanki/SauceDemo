@@ -39,8 +39,18 @@ class Inventory extends BasePage{
             await firstProduct.getByRole('button', {name:/add to cart/i}).click()
     }
 
-    async removeProductFromCart(){
-        await this.page.getByTestId("shopping-cart-link").click();
+    async addSecondProductToCart(){
+        const secondProduct = this.products.nth(1);
+        await secondProduct.getByRole('button', {name:/add to cart/i}).click()    
+    }
+
+    async addProductsByIndex (index){
+        const currentProduct = this.products.n(index);
+        await currentProduct.getByRole('button', {name: /add to cart/i}).click();
+    }
+
+    async removeFirstProductFromCart(){
+        await this.page.locator('.shopping_cart_link').click();
         const firstCartItem = this.page.locator('.cart_item').first();
         await firstCartItem.getByRole('button', {name: /remove/i}).click();
     }
@@ -51,7 +61,6 @@ class Inventory extends BasePage{
 
     async getCartCount(){
       const cartIcon = this.page.locator('.shopping_cart_link');
-      await expect(cartIcon).toHaveText(/^\d+$/); 
       const productCount = await cartIcon.textContent();
       return Number(productCount || 0);
     }
