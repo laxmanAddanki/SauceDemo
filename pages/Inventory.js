@@ -1,5 +1,3 @@
-import {expect } from '@playwright/test';
-
 const {BasePage} = require('./BasePage')
 
 class Inventory extends BasePage{
@@ -34,7 +32,7 @@ class Inventory extends BasePage{
         
     }
 
-    async addProductsByIndex (index){
+    async addProductsByIndex(index){
         const currentProduct = this.products.nth(index);
         await currentProduct.getByRole('button', {name: /add to cart/i}).click();
     }
@@ -47,12 +45,6 @@ class Inventory extends BasePage{
     async goToCart(){
        const cartIcon =  this.page.locator('.shopping_cart_link');
         await cartIcon.click();
-    }
-
-    async getCartCount(){
-      const cartIcon = this.page.locator('.shopping_cart_link');
-      const productCount = await cartIcon.textContent();
-      return Number(productCount || 0);
     }
 
     async sortBy(option){

@@ -1,20 +1,33 @@
     const {test, expect} = require("../fixtures/LoggedInFixture")
+    const{Cart} = require("../pages/Cart")
     
-
+   
     test.describe("Inventory Tests", () => {
 
     test('Verify product count', async({inventoryPage})=> {
         const productNames = await inventoryPage.getProductNames();
         expect(productNames.length).toBe(6);
     })
-    test("Check number of products in cart", async({inventoryPage})=>{
+    test("Add Products to the cart", async({inventoryPage, page})=>{
         await inventoryPage.addProductsByIndex(0);
-        const count = await inventoryPage.getCartCount();
+        await inventoryPage.goToCart();
+        const cartpage = new Cart(page);
+        const count = await cartpage.getCartCount();
         expect(count).toBe(1);  
     })
-    test('Navigate to Cart', async({inventoryPage, page})=>{
+
+    test('Navigate to Cart', async({inventoryPage,page})=>{
         await inventoryPage.goToCart();
         await expect(page).toHaveURL(/cart.html/);
+    })
+
+    test.only('Check number of products in cart', async({inventoryPage,page})=>{
+        await inventoryPage.addProductsByIndex(0);
+        const cartpage = new Cart(page);
+        const cartItems = await cartpage.getCartCount();
+        const totalAvailibleItemsInCart = await cartpage.checkAvailibleProducts();
+        expect(totalAvailibleItemsInCart[0]).toBe(cartItems);
+    
     })
 
     test('Add second product to cart', async({inventoryPage})=>{
@@ -57,12 +70,10 @@
         expect(productPrices[1]).toBe("$9.99");
     })
 
-    test.only("Sort the Price from High to Low anc check the prices", async({inventoryPage})=>{
+    test("Sort the Price from High to Low anc check the prices", async({inventoryPage})=>{
         await inventoryPage.sortBy("hilo");
         const productPrices = await inventoryPage.getProductPrices();
         expect(productPrices[0]).toBe("$49.99");
         expect(productPrices[1]).toBe("$29.99");
-
-
     })
     });
